@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_amazon/common/widgets/custom_button.dart';
 import 'package:flutter_amazon/common/widgets/custom_textfield.dart';
 import 'package:flutter_amazon/constants/global_variables.dart';
+import 'package:flutter_amazon/features/auth/services/auth_service.dart';
 
 enum Auth { signin, signup }
 
@@ -17,7 +18,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
-
+  final AuthService authService = AuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -28,6 +29,15 @@ class _AuthScreenState extends State<AuthScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _nameController.dispose();
+  }
+
+  void signUpUser() {
+    authService.signUpUser(
+      context: context,
+      email: _emailController.text,
+      password: _passwordController.text,
+      name: _nameController.text,
+    );
   }
 
   @override
@@ -45,12 +55,6 @@ class _AuthScreenState extends State<AuthScreen> {
                 "Welcome",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
               ),
-              // RadioMenuButton(
-              //   value: context,
-              //   groupValue: context,
-              //   onChanged: (value) => changeValue,
-              //   child: const Text("Create Account"),
-              // ),
               Container(
                 margin: EdgeInsets.only(bottom: _auth == Auth.signup ? 0 : 8),
                 decoration: BoxDecoration(
@@ -142,7 +146,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                 hintText: "Password",
                               ),
                               const SizedBox(height: 20),
-                              CustomButton(text: "Sign-Up", onTap: () {}),
+                              CustomButton(text: "Sign-Up", onTap: () {
+                                if(_signUpFormKey.currentState!.validate()){
+                                  signUpUser();
+                                }
+                              }),
                             ],
                           ),
                         ),
@@ -222,7 +230,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                         ),
                         child: Form(
-                          key: _signUpFormKey,
+                          key: _signInFormKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [

@@ -33,4 +33,7 @@ authRouter.post("/api/signup", async (req, res) => {
     //return data to the user
 });
 
+//signin route
+
+
 module.exports = authRouter;

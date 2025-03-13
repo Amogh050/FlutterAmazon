@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon/constants/global_variables.dart';
 import 'package:flutter_amazon/features/auth/screens/auth_screen.dart';
-import 'package:flutter_amazon/home_screen.dart';
 import 'package:flutter_amazon/router.dart';
 
 void main() {
