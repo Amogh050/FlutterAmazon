@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon/common/widgets/bottom_bar.dart';
 import 'package:flutter_amazon/constants/global_variables.dart';
+import 'package:flutter_amazon/features/admin/screens/admin_screen.dart';
 import 'package:flutter_amazon/features/auth/screens/auth_screen.dart';
 import 'package:flutter_amazon/features/auth/services/auth_service.dart';
-import 'package:flutter_amazon/features/home/screens/home_screen.dart';
 import 'package:flutter_amazon/providers/user_provider.dart';
 import 'package:flutter_amazon/router.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +56,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? const HomeScreen() : const AuthScreen(),
+      home: Provider.of<UserProvider>(context).user.token.isNotEmpty ? Provider.of<UserProvider>(context).user.type == 'user' ? const BottomBar() : AdminScreen() : const AuthScreen(),
     );
   }
 }
