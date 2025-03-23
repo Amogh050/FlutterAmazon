@@ -1,30 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon/common/widgets/loader.dart';
 import 'package:flutter_amazon/constants/global_variables.dart';
 import 'package:flutter_amazon/features/home/widgets/address_box.dart';
-import 'package:flutter_amazon/features/home/widgets/carousal_image.dart';
-import 'package:flutter_amazon/features/home/widgets/deal_of_day.dart';
-import 'package:flutter_amazon/features/home/widgets/top_categories.dart';
-import 'package:flutter_amazon/features/search/screens/search_screen.dart';
+import 'package:flutter_amazon/features/product_details/screens/product_details_screen.dart';
+import 'package:flutter_amazon/features/search/services/search_services.dart';
+import 'package:flutter_amazon/features/search/widget/searched_product.dart';
+import 'package:flutter_amazon/models/product.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const String routeName = '/home';
-  const HomeScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  static const String routeName = '/search-screen';
+  final String searchQuery;
+  const SearchScreen({super.key, required this.searchQuery});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController searchController = TextEditingController();
+class _SearchScreenState extends State<SearchScreen> {
+  List<Product>? products;
+  final SearchServices searchServices = SearchServices();
 
-  void navigateToSearchScreen() {
-    if (searchController.text.trim().isNotEmpty) {
-      Navigator.pushNamed(context, SearchScreen.routeName, arguments: searchController.text);
-    }
+  @override
+  void initState() {
+    super.initState();
+    fetchSearchedProduct();
+  }
+
+  fetchSearchedProduct() async {
+    products = await searchServices.fetchSearchedProduct(
+      context: context,
+      searchQuery: widget.searchQuery,
+    );
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController searchController = TextEditingController();
+
+    void navigateToSearchScreen() {
+      if (searchController.text.trim().isNotEmpty) {
+        Navigator.pushNamed(
+          context,
+          SearchScreen.routeName,
+          arguments: searchController.text,
+        );
+      }
+    }
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -92,18 +115,25 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            AddressBox(),
-            SizedBox(height: 10),
-            TopCategories(),
-            SizedBox(height: 10),
-            CarousalImage(),
-            DealOfDay(),
-          ],
-        ),
-      ),
+      body:
+          products == null
+              ? Loader()
+              : Column(
+                children: [
+                  AddressBox(),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: products!.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(onTap: () {
+                          Navigator.pushNamed(context, ProductDetailsScreen.routeName, arguments: products![index]);
+                        }  ,child: SearchedProduct(product: products![index]));
+                      },
+                    ),
+                  ),
+                ],
+              ),
     );
   }
 }

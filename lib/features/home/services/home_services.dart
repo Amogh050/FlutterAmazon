@@ -1,0 +1,44 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_amazon/constants/error_handling.dart';
+import 'package:flutter_amazon/constants/global_variables.dart';
+import 'package:flutter_amazon/constants/utils.dart';
+import 'package:flutter_amazon/models/product.dart';
+import 'package:flutter_amazon/providers/user_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+
+class HomeServices {
+  Future<List<Product>> fetchCategoryProducts({
+    required BuildContext context,
+    required String category,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Product> productList = [];
+    try {
+      http.Response res = await http.get(
+        Uri.parse('$uri/api/products?category=$category'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+      );
+
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          var jsonData = jsonDecode(res.body);
+          var products = jsonData['products'] as List;
+          for (int i = 0; i < products.length; i++) {
+            productList.add(Product.fromJson(jsonEncode(products[i])));
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return productList;
+  }
+}
