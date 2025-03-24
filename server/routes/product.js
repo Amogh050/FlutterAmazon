@@ -31,9 +31,9 @@ productRouter.get('/api/products/search/:searchQuery', auth, async (req, res) =>
 productRouter.post('/api/rate-product', auth, async (req, res) => {
     try {
         const { rating, id } = req.body;
-        let product = await Product.findById( id );
-        for(let i =0 ;i<product.ratings.length;i++){
-            if(product.ratings[i].userId == req.user){
+        let product = await Product.findById(id);
+        for (let i = 0; i < product.ratings.length; i++) {
+            if (product.ratings[i].userId == req.user) {
                 product.ratings.splice(i, 1);
                 break;
             }
@@ -49,6 +49,31 @@ productRouter.post('/api/rate-product', auth, async (req, res) => {
     } catch (e) {
         res.status(500).json({ error: e.message });
     }
-})
+});
+
+productRouter.get("/api/deal-of-day", auth, async (req, res) => {
+    try {
+        let products = await Product.find({});
+
+        products = products.sort((a, b) => {
+            let aSum = 0;
+            let bSum = 0;
+
+            for (let i = 0; i < a.ratings.length; i++) {
+                aSum += a.ratings[i].rating;
+            }
+
+            for (let i = 0; i < b.ratings.length; i++) {
+                bSum += b.ratings[i].rating;
+            }
+            return aSum < bSum ? 1 : -1;
+        });
+
+        res.json(products[0]);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 
 module.exports = productRouter;

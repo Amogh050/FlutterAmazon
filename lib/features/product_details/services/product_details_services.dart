@@ -32,4 +32,6 @@ class ProductDetailsServices {
       showSnackBar(context, e.toString());
     }
   }
+
+  void addToCart({required BuildContext context, required Product product}) {}
 }

@@ -127,7 +127,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       itemCount: products!.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(onTap: () {
-                          Navigator.pushNamed(context, ProductDetailsScreen.routeName, arguments: products![index]);
+                          Navigator.pushNamed(context, ProductDetailScreen.routeName, arguments: products![index]);
                         }  ,child: SearchedProduct(product: products![index]));
                       },
                     ),
