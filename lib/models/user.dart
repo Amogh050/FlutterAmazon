@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class User {
@@ -8,6 +9,7 @@ class User {
   final String address;
   final String type;
   final String token;
+  final List<dynamic> cart;
 
   User({
     required this.id,
@@ -17,29 +19,8 @@ class User {
     required this.address,
     required this.type,
     required this.token,
+    required this.cart,
   });
-
-  
-
-  User copyWith({
-    String? id,
-    String? name,
-    String? email,
-    String? password,
-    String? address,
-    String? type,
-    String? token,
-  }) {
-    return User(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      password: password ?? this.password,
-      address: address ?? this.address,
-      type: type ?? this.type,
-      token: token ?? this.token,
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -50,6 +31,7 @@ class User {
       'address': address,
       'type': type,
       'token': token,
+      'cart': cart,
     };
   }
 
@@ -62,6 +44,9 @@ class User {
       address: map['address'] ?? '',
       type: map['type'] ?? '',
       token: map['token'] ?? '',
+      cart: List<Map<String, dynamic>>.from(
+        map['cart']?.map((x) => Map<String, dynamic>.from(x)),
+      ),
     );
   }
 
@@ -71,31 +56,29 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $id, name: $name, email: $email, password: $password, address: $address, type: $type, token: $token)';
+    return 'User(id: $id, name: $name, email: $email, password: $password, address: $address, type: $type, token: $token, cart: $cart)';
   }
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-  
-    return other is User &&
-      other.id == id &&
-      other.name == name &&
-      other.email == email &&
-      other.password == password &&
-      other.address == address &&
-      other.type == type &&
-      other.token == token;
-  }
 
-  @override
-  int get hashCode {
-    return id.hashCode ^
-      name.hashCode ^
-      email.hashCode ^
-      password.hashCode ^
-      address.hashCode ^
-      type.hashCode ^
-      token.hashCode;
+  User copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? password,
+    String? address,
+    String? type,
+    String? token,
+    List<dynamic>? cart,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      address: address ?? this.address,
+      type: type ?? this.type,
+      token: token ?? this.token,
+      cart: cart ?? this.cart,
+    );
   }
 }
