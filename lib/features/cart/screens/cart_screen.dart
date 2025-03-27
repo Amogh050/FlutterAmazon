@@ -19,8 +19,12 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   final TextEditingController searchController = TextEditingController();
 
-  void navigateToAddressScreen() {
-    Navigator.pushNamed(context, AddressScreen.routeName);
+  void navigateToAddressScreen(int sum) {
+    Navigator.pushNamed(
+      context,
+      AddressScreen.routeName,
+      arguments: sum.toString(),
+    );
   }
 
   void navigateToSearchScreen() {
@@ -36,6 +40,10 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
+    int sum = 0;
+    user.cart
+        .map((e) => sum += e['quantity'] * e['product']['price'] as int)
+        .toList();
 
     return Scaffold(
       appBar: PreferredSize(
@@ -113,7 +121,7 @@ class _CartScreenState extends State<CartScreen> {
               padding: const EdgeInsets.all(8.0),
               child: CustomButton(
                 text: 'Proceed to Buy (${user.cart.length})',
-                onTap: navigateToAddressScreen,
+                onTap: () => navigateToAddressScreen(sum),
                 color: Colors.yellow.shade600,
               ),
             ),
