@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon/constants/global_variables.dart';
+import 'package:flutter_amazon/features/admin/screens/analytics_screen.dart';
+import 'package:flutter_amazon/features/admin/screens/orders_screen.dart';
 import 'package:flutter_amazon/features/admin/screens/product_screen.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -16,8 +18,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
   List<Widget> pages = [
     ProductScreen(),
-    const Center(child: Text("Analytics Page"),),
-    const Center(child: Text("Add item Page"),),
+    AnalyticsScreen(),
+    OrdersScreen(),
   ];
 
   void updatePage(int page) {
@@ -25,7 +27,7 @@ class _AdminScreenState extends State<AdminScreen> {
       _page = page;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
