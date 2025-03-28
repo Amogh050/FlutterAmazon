@@ -4,16 +4,19 @@ class CustomTextfield extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final int maxLines;
+  final bool obscureText;
   const CustomTextfield({
     super.key,
     required this.controller,
     required this.hintText,
     this.maxLines = 1,
+    this.obscureText = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: obscureText,
       maxLines: maxLines,
       controller: controller,
       decoration: InputDecoration(
