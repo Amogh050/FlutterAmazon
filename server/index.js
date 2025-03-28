@@ -1,3 +1,4 @@
+require('dotenv').config();
 //import from packages
 const express = require("express");
 const mongoose = require("mongoose");
@@ -12,8 +13,8 @@ const userRouter = require("./routes/user");
 
 //init
 const app = express();
-const PORT = 3000;
-const DB = "mongodb+srv://deshpandeamogh25:bA3NBYv3qDjd9h0f@cluster0.xmyj8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+const PORT = process.env.PORT || 3000;
+const DB = process.env.MONGO_URL;
 
 //connect mongodb
 mongoose.connect(DB)

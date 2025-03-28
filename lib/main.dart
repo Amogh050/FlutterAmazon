@@ -6,9 +6,12 @@ import 'package:flutter_amazon/features/auth/screens/auth_screen.dart';
 import 'package:flutter_amazon/features/auth/services/auth_service.dart';
 import 'package:flutter_amazon/providers/user_provider.dart';
 import 'package:flutter_amazon/router.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
